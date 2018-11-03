@@ -9,10 +9,16 @@ const store ={
         searchTerm : null,
 };
 
-function renderShoppingList(){
+const tempStore ={
+        items: [],
+        hideChecked : false,
+        searchTerm : null,
+};
+
+function renderShoppingList(current){
     //for each item in STORE generate a string template for <li>
     //item name rendered as inner text
-    const storeString = iterateListItemGenerator(store.items);
+    const storeString = iterateListItemGenerator(current.items);
     $('.js-shopping-list').html(storeString);
     console.log('`renderShopping` ran');
 }
@@ -45,7 +51,7 @@ function uncheckItemsListed() {
     $('.js-check').click(() => {
         store.hideChecked = store.hideChecked ? false : true;
         console.log(store.hideChecked);
-        renderShoppingList();
+        renderShoppingList(store);
     }
     );
   
@@ -56,7 +62,7 @@ function handleNewItemSubmit(){
     event.preventDefault();
     const newItemName = $(".js-shopping-list-entry").val();
     addToList(newItemName);
-    renderShoppingList();
+    renderShoppingList(store);
     $('.js-shopping-list-entry').val('');
     });
 
@@ -72,9 +78,14 @@ function addToList(inputName) {
 
 function searchFor() {
     $('#js-shopping-list-form-search').submit(event => {
-        console.log(event);
-        const temp = store.items.filter(item => item.name === $(".js-shopping-list-entry").val());
-        
+        event.preventDefault();
+        console.log(store.items);
+        if($(".js-shopping-list-entry-search").val() === ''){
+            renderShoppingList(store);
+        }else{
+            tempStore.items = store.items.filter(item => item.name === $(".js-shopping-list-entry-search").val());
+            renderShoppingList(tempStore);
+        }
     });
 }
 
@@ -84,7 +95,7 @@ function handleItemCheckClicked() {
         const targetIndex = getItemIndexFromElement(event.currentTarget)
         
         store.items[targetIndex].checked = store.items[targetIndex].checked ? false : true;
-        renderShoppingList();
+        renderShoppingList(store);
       });
       
 }
@@ -97,7 +108,7 @@ function handleDeleteItemClicked() {
         console.log(targetIndex);
         store.items.splice(targetIndex,1);
         console.log(store.items);
-        renderShoppingList();
+        renderShoppingList(store);
     } );
     console.log('`handleDeleteItemClicked` ran');
 }
@@ -113,9 +124,9 @@ function handleShoppingList(){
 handleDeleteItemClicked();
 handleItemCheckClicked();
 handleNewItemSubmit();
-renderShoppingList();
 uncheckItemsListed();
 searchFor();
+renderShoppingList(store);
 }
 
 $(handleShoppingList);
