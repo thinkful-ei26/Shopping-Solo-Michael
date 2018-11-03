@@ -19,12 +19,14 @@ function renderShoppingList(current){
     //for each item in STORE generate a string template for <li>
     //item name rendered as inner text
     const storeString = iterateListItemGenerator(current.items);
+    console.log(storeString);
     $('.js-shopping-list').html(storeString);
     console.log('`renderShopping` ran');
 }
 
 function listItemGenerator(item, itemIndex){
-    return `<li class="js-item-index-element" data-item-index="${itemIndex}">
+    return `
+    <li class="js-item-index-element" data-item-index="${itemIndex}">
         <span class="shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>
             <div class="shopping-item-controls">
                 <button class="shopping-item-toggle">
@@ -43,23 +45,17 @@ function listItemGenerator(item, itemIndex){
 
 function iterateListItemGenerator(items) {
     if(store.hideChecked){
-        const temp = items.filter(check => !check.checked);
-        const sharStr = temp.map((item, index)=> listItemGenerator(item,index));
-        return sharStr.join();
-    }else{
-        const temp = items.map((item, index)=> listItemGenerator(item,index)); 
-        return temp.join();              
+        return items.filter(check => !check.checked).map((item, index)=> listItemGenerator(item,index)).join('');
+    }else{ 
+        return items.map((item, index)=> listItemGenerator(item,index)).join('');              
     }
 }
 
 function uncheckItemsListed() {
     $('.js-check').click(() => {
-        store.hideChecked = store.hideChecked ? false : true;
-        console.log(store.hideChecked);
+        store.hideChecked = !store.hideChecked;
         renderShoppingList(store);
-    }
-    );
-  
+    });
 }
    
 function handleNewItemSubmit(){
@@ -70,15 +66,10 @@ function handleNewItemSubmit(){
     renderShoppingList(store);
     $('.js-shopping-list-entry').val('');
     });
-
-    //handle when new items are added by user
-    console.log('`handleNewItemSubmit` ran');
-
 }
 
 function addToList(inputName) {
     store.items.push({name:`${inputName}`, checked: false});
-    console.log(store.items);
 }
 
 function searchFor() {
@@ -88,7 +79,7 @@ function searchFor() {
         if($(".js-shopping-list-entry-search").val() === ''){
             renderShoppingList(store);
         }else{
-            tempStore.items = store.items.filter(item => item.name === $(".js-shopping-list-entry-search").val());
+            tempStore.items = store.items.filter(item => item.name.indexOf($(".js-shopping-list-entry-search").val()) > -1);
             renderShoppingList(tempStore);
         }
     });
@@ -97,8 +88,7 @@ function searchFor() {
 function handleItemCheckClicked() {
     //User clicks check button
     $('.js-shopping-list').on('click', `.shopping-item-toggle`, event => {
-        const targetIndex = getItemIndexFromElement(event.currentTarget)
-        
+        const targetIndex = getItemIndexFromElement(event.currentTarget);
         store.items[targetIndex].checked = store.items[targetIndex].checked ? false : true;
         renderShoppingList(store);
       });
