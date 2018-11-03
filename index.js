@@ -1,9 +1,9 @@
 'use strict';
 const store ={
-        items: [{name:"lime",checked:false},
-        {name:"banana",checked:false},
-        {name:"apples",checked:false},
-        {name:"soup",checked:false}],
+        items: [{name:"lime",checked:false, edit: false},
+        {name:"banana",checked:false, edit: false},
+        {name:"apples",checked:false, edit: false},
+        {name:"soup",checked:false, edit: false}],
 
         hideChecked : false,
         searchTerm : null,
@@ -29,9 +29,14 @@ function listItemGenerator(item, itemIndex){
             <div class="shopping-item-controls">
                 <button class="shopping-item-toggle">
                     <span class="button-label">check</span>
-                </button> <button class="shopping-item-delete">
+                </button> 
+                <button class="shopping-item-delete">
                     <span class="button-label">delete</span>
-                    </button>
+                </button>
+                </button> <button class="shopping-item-edit">
+                <span class="button-label">edit</span>
+                </button>
+                <input type="text" name="shopping-list-entry-edit" class="shopping-list-entry-edit" placeholder="...">
                 </div>
         </li>`;    
     }
@@ -113,6 +118,14 @@ function handleDeleteItemClicked() {
     console.log('`handleDeleteItemClicked` ran');
 }
 
+function editItems() {
+    $('.js-shopping-list').on('click','.shopping-item-edit' ,function (event) {
+        const targetIndex = getItemIndexFromElement(event.currentTarget);
+        store.items[targetIndex].name = $('.shopping-list-entry-edit').val();
+        renderShoppingList(store);
+    })
+}
+
 function getItemIndexFromElement(item) {
     const itemIndexString = $(item)
       .closest('.js-item-index-element')
@@ -126,6 +139,7 @@ handleItemCheckClicked();
 handleNewItemSubmit();
 uncheckItemsListed();
 searchFor();
+editItems();
 renderShoppingList(store);
 }
 
