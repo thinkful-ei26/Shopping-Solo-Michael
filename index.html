@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Shopping List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Shopping List</h1>
+        <form id="js-shopping-list-form">
+            <label for="shopping-list-entry">Add an item</label>
+            <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
+            <button type="submit">Add item</button>
+        </form>
+        <form id="js-shopping-list-form-search">
+            <label for="shopping-list-entry-search">Search</label>
+            <input type="text" name="shopping-list-entry-search" class="js-shopping-list-entry-search" placeholder="e.g., broccoli">
+            <button type="submit">Search</button>
+        </form>
+        <form id="js-shopping-list-form-edit">
+            <label for="shopping-list-entry">Edit Name</label>
+            <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
+            <button type="submit">Edit</button>
+        </form>
+        <input type="checkbox" class="js-check">Unchecked Items Only<br>
+        <ul class="shopping-list js-shopping-list">
+        </ul>
+    </div>
+    <script src="//code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+</body>
+</html>
